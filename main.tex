@@ -1,0 +1,85 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{amsmath, amssymb, graphicx, natbib, hyperref}
+\usepackage{authblk}
+\usepackage{enumitem}
+
+\title{Tempered Transitions and Annealing for Multimodal Posteriors}
+\author[1]{Ezequiel de Braga Santos}
+\affil[1]{School of Applied Mathematics - Getulio Vargas Foundation (FGV EMAp)}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+\section{Introduction}
+
+\begin{itemize}
+    \item Motivation: Why multimodal posteriors are challenging in Bayesian inference;
+    \item Common problems: Local modes, poor mixing, label switching;
+    \item Brief introduction to MCMC limitations in this context.
+\end{itemize}
+
+
+
+\section{Background}
+\subsection{Multimodal Posteriors}
+Explain why multimodality arises (e.g., in mixture models) and how it affects sampling.
+
+\subsection{Limitations of Standard MCMC}
+Discuss issues like poor mixing, high autocorrelation, and the label-switching problem.
+
+\section{Tempered Transitions}
+\subsection{Theory}
+Tempered transitions \citep{neal1996sampling} involve defining a sequence of intermediate distributions between a flattened (high-temperature) and original (low-temperature) posterior.
+
+\subsection{Algorithm}
+Outline the algorithm steps or provide pseudocode.
+
+\section{Simulated Annealing}
+\subsection{Concept}
+Simulated annealing introduces temperature control to help the chain escape local modes.
+
+\subsection{Annealing Schedules}
+Discuss temperature schedules and convergence guarantees.
+
+\section{Applications}
+\begin{itemize}
+    \item \textbf{Mixture models}: Handling label switching.
+    \item \textbf{Ancestral inference}: \citep{geyer1995annealing}.
+    \item \textbf{Bayesian neural networks}.
+\end{itemize}
+
+\section{Implementation and Diagnostics}
+Discuss:
+\begin{itemize}
+    \item Choosing a temperature ladder.
+    \item Computational cost.
+    \item Mixing diagnostics and visualization tools.
+\end{itemize}
+
+\section{Case Study: Gaussian Mixture Model}
+
+\begin{itemize}
+    \item Provide results comparing standard MCMC (Gibbs sample) vs. tempered transitions on a multimodal posterior;
+    \item Analyse label-switching.
+\end{itemize}
+
+
+\section{Discussion}
+Analyze strengths, weaknesses, and trade-offs. Suggest when these methods are useful and mention alternatives.
+
+\section{Conclusion}
+Summarize the benefits of tempered transitions and annealing for dealing with multimodal posteriors. Suggest future work or open problems.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
+
