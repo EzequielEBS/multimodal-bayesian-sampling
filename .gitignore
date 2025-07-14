@@ -1,0 +1,17 @@
+.Rproj.user
+.Rhistory
+.RData
+*.Rproj
+.Ruserdata
+main.log
+main.out
+main.aux
+main.bbl
+main.blg
+main.fls
+main.fdb_latexmk
+main.synctex.gz
+samples/
+papers/
+sample_mix_norm.R
+
