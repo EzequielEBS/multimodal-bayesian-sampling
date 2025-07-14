@@ -9,6 +9,8 @@ library(parallel)
 library(dplyr)
 library(coda)
 library(tidyr)
+library(patchwork)
+library(scales)
 
 #-------------------------------------------------------------------------------
 # Conditional distributions for Gibbs sampling
