@@ -11,6 +11,7 @@ library(coda)
 library(tidyr)
 library(patchwork)
 library(scales)
+library(knitr)
 
 #-------------------------------------------------------------------------------
 # Conditional distributions for Gibbs sampling

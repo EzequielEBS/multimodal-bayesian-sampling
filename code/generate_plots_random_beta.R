@@ -84,7 +84,7 @@ plot_trace <- function(samples, param_name, true_values) {
   name_legend <- ifelse(param_name == "sigma2",
                         expression(sigma^2),
                         ifelse(param_name == "mu", expression(mu),
-                               expression(p))
+                               expression(pi))
   )
   trace_plot <- ggplot(samples_long, aes(x = iteration, y = value, color = parameter)) +
     geom_line() +
@@ -159,11 +159,29 @@ ggsave("figures/data_plot_random_beta.png",
 #-------------------------------------------------------------------------------
 
 post_p <- (post_p_gibbs + post_p_par_temp + post_p_temp_tran) +
-  plot_layout(ncol = 3, guides = "collect")
+  plot_layout(ncol = 3, guides = "collect") &
+  theme(text = element_text(size = 16),        # Base text size
+        axis.title = element_text(size = 18),  # Axis titles
+        axis.text = element_text(size = 16),   # Axis tick labels
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 16)) &
+  labs(y = "")
 post_mu <- (post_mu_gibbs + post_mu_par_temp + post_mu_temp_tran) +
-  plot_layout(ncol = 3, guides = "collect")
+  plot_layout(ncol = 3, guides = "collect") &
+  theme(text = element_text(size = 16),        # Base text size
+        axis.title = element_text(size = 18),  # Axis titles
+        axis.text = element_text(size = 16),   # Axis tick labels
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 16)) &
+  labs(y = "")
 post_sigma2 <- (post_sigma2_gibbs + post_sigma2_par_temp + post_sigma2_temp_tran) +
-  plot_layout(ncol = 3, guides = "collect")
+  plot_layout(ncol = 3, guides = "collect") &
+  theme(text = element_text(size = 16),        # Base text size
+        axis.title = element_text(size = 18),  # Axis titles
+        axis.text = element_text(size = 16),   # Axis tick labels
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 16)) &
+  labs(y = "")
 
 # Save posterior distribution plots
 ggsave("figures/post_p_random_beta.png",
@@ -212,3 +230,64 @@ ggsave("figures/trace_mu_random_beta.png",
 ggsave("figures/trace_sigma2_random_beta.png",
        plot = trace_sigma2,
        width = 16, height = 12, dpi = 300)
+
+#-------------------------------------------------------------------------------
+# Combine acceptance rate
+#-------------------------------------------------------------------------------
+
+acceptance_rate <- tibble(
+  Method = c("Gibbs", "Parallel Tempering", "Temperated Transition"),
+  mu = c(gibbs_samples$acceptance_probs$mu,
+         samples_parallel_temp$acceptance_probs$mu[1],
+         samples_temp_tran$acceptance_probs$mu),
+  sigma2 = c(gibbs_samples$acceptance_probs$sigma2,
+             samples_parallel_temp$acceptance_probs$sigma2[1],
+             samples_temp_tran$acceptance_probs$sigma2),
+  pi = c(gibbs_samples$acceptance_probs$p,
+         samples_parallel_temp$acceptance_probs$p[1],
+         samples_temp_tran$acceptance_probs$p)
+)
+
+kable(acceptance_rate, format = "latex", digits = 3, booktabs = TRUE, caption = "Acceptance Rates by Method")
+
+ess <- tibble(
+  Method = c("Gibbs", "Parallel Tempering", "Temperated Transition"),
+  mu1 = c(as.numeric(gibbs_samples$ess$mu[1]),
+          as.numeric(samples_parallel_temp$ess$mu[1]),
+          as.numeric(samples_temp_tran$ess$mu[1])),
+  mu2 = c(as.numeric(gibbs_samples$ess$mu[2]),
+          as.numeric(samples_parallel_temp$ess$mu[2]),
+          as.numeric(samples_temp_tran$ess$mu[2])),
+  mu3 = c(as.numeric(gibbs_samples$ess$mu[3]),
+          as.numeric(samples_parallel_temp$ess$mu[3]),
+          as.numeric(samples_temp_tran$ess$mu[3])),
+  mu4 = c(as.numeric(gibbs_samples$ess$mu[4]),
+          as.numeric(samples_parallel_temp$ess$mu[4]),
+          as.numeric(samples_temp_tran$ess$mu[4])),
+  sigma21 = c(as.numeric(gibbs_samples$ess$sigma2[1]),
+              as.numeric(samples_parallel_temp$ess$sigma2[1]),
+              as.numeric(samples_temp_tran$ess$sigma2[1])),
+  sigma22 = c(as.numeric(gibbs_samples$ess$sigma2[2]),
+              as.numeric(samples_parallel_temp$ess$sigma2[2]),
+              as.numeric(samples_temp_tran$ess$sigma2[2])),
+  sigma23 = c(as.numeric(gibbs_samples$ess$sigma2[3]),
+              as.numeric(samples_parallel_temp$ess$sigma2[3]),
+              as.numeric(samples_temp_tran$ess$sigma2[3])),
+  sigma24 = c(as.numeric(gibbs_samples$ess$sigma2[4]),
+              as.numeric(samples_parallel_temp$ess$sigma2[4]),
+              as.numeric(samples_temp_tran$ess$sigma2[4])),
+  p1 = c(as.numeric(gibbs_samples$ess$p[1]),
+         as.numeric(samples_parallel_temp$ess$p[1]),
+         as.numeric(samples_temp_tran$ess$p[1])),
+  p2 = c(as.numeric(gibbs_samples$ess$p[2]),
+         as.numeric(samples_parallel_temp$ess$p[2]),
+         as.numeric(samples_temp_tran$ess$p[2])),
+  p3 = c(as.numeric(gibbs_samples$ess$p[3]),
+         as.numeric(samples_parallel_temp$ess$p[3]),
+         as.numeric(samples_temp_tran$ess$p[3])),
+  p4 = c(as.numeric(gibbs_samples$ess$p[4]),
+         as.numeric(samples_parallel_temp$ess$p[4]),
+         as.numeric(samples_temp_tran$ess$p[4]))
+)
+
+kable(t(ess), format = "latex", digits = 0, booktabs = TRUE, caption = "Effective Sample Size by Method")
