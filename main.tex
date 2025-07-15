@@ -39,8 +39,8 @@ distributions. However, one of the main challenges in Bayesian inference arises 
 \textit{label switching} problem, particularly in mixture models where the posterior distribution is
 multimodal and non-identifiable. This paper provides an overview of the label switching problem, its 
 implications for MCMC sampling, and various strategies to address it. We focus on three MCMC methods:
-simulated tempering, parallel tempering, and tempered transitions. We illustrate these methods through a
-case study using simulated data from a random beta model, comparing the effectiveness of each method in
+simulated tempering, parallel tempering, and tempered transitions. We illustrate the two last methods through a 
+simulated data from a random beta model, comparing the effectiveness of each method in
 sampling from the posterior distribution. We also discuss the impact of label switching on posterior inference
 and the effectiveness of post-processing techniques to resolve it. Our findings highlight the strengths and
 limitations of each method, providing insights into their practical applications in Bayesian inference.
@@ -149,15 +149,15 @@ where $\beta_0 = 1 > \beta_1 > \cdots > \beta_m = \beta^*$ and $Z_i = Z_i(\beta_
 
 The algorithm alternates between:
 \begin{enumerate}
-    \item Sampling $\btheta$ from $p_i(x)$ using MCMC,
+    \item Sampling $x$ from $p_i(x)$ using MCMC,
     \item Proposing a change to temperature $j = i \pm 1$ using transition probabilities $q_{ij}$,
     \item Accepting the move with probability:
     \[
-        \alpha_{ij} = \min\left(1, \frac{p_j(\btheta)\pi_0(j) q_{ji} }{p_i(\btheta)\pi_0(i) q_{ij} }\right),
+        \alpha_{ij} = \min\left(1, \frac{p_j(x)\pi_0(j) q_{ji} }{p_i(x)\pi_0(i) q_{ij} }\right),
     \]
 \end{enumerate}
 where $\pi_0(i)$ is a pseudoprior over the temperatures. When $q_{ij}$ is
-uniform, i.e., $q_{ij} = 1/2$ for $1 < i < m$ and $q_{ij} = 1$ for $i = 1, m$, we can simplify the
+uniform, i.e., $q_{ij} = 1/2$ for $1 < i < m$ and $q_{12} = q_{m,m-1} = 1$, we can simplify the
 acceptance probability.
 
 This method updates the chain in two steps: first, it samples from the tempered distribution
@@ -247,7 +247,7 @@ As this expectation is intractable, it is approximated using Monte Carlo methods
 described by Stephens et al.~\citep{stephens2002dealing}, the algorithm proceeds by starting with an
 initial guess for the labels, then iteratively minimizes the posterior expected loss until convergence.
 
-\section{Case Study: Simulated Data}
+\section{Simulated Data}
 
 We will simulate data from a random beta model with $K = 4$ components, using the following parameters:
 \begin{align*}
@@ -404,8 +404,8 @@ focusing on the label switching problem. We discussed how standard MCMC methods,
 struggle with local modes and poor mixing in this context. We then introduced several advanced techniques,
 including simulated tempering, parallel tempering, and tempered transitions, which improve exploration of the
 posterior landscape. Also, we discussed how these methods can be combined with relabeling algorithms to address
-the label switching problem. Then we presented a case study using simulated data from a random beta model, 
-demonstrating the effectiveness of these methods in sampling from multimodal posteriors. 
+the label switching problem. Then we presented an example using simulated data from a random beta model, 
+demonstrating the effectiveness of these methods in sampling from a multimodal posterior. 
 
 We found that while Gibbs sampling does not move between modes, both parallel tempering and tempered transitions
 are able to explore the multimodal posterior effectively, especially for the parallel tempering method. We also
@@ -414,7 +414,7 @@ temperatures and the proposal distributions. The acceptance rates were significa
 the effective sample sizes were much lower for the tempered transitions method, indicating that there is a
 large autocorrelation in the samples and that the method does not explore the posterior well.
 
-Despite the issues related, all methods were able to recover the true parameter values except for one of the 
+Despite the issues related, all methods were able to recover the true parameter values except for some
 components of $\bpi$. Furthermore, the identifiability constraints were effective in aligning the modes of the
 posterior distributions in this case study. However, the larger computational cost of the tempered methods
 and the need for a large number of iterations to achieve convergence are important considerations in practice. 
